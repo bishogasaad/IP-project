@@ -9,8 +9,9 @@ def detectedPlate(image,X,Y,W,H):
 def detectplate(im):
 
     image = resize(im, 720)
-
+    image = cv2.bilateralFilter(image,10,300,300)
     edges = cv2.Canny(image, 100, 300)
+
     contours, hierarchy = cv2.findContours(edges, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
     height, width = edges.shape
@@ -28,7 +29,7 @@ def detectplate(im):
     for c in contours:
         (x,y,w,h) = cv2.boundingRect(c)
 
-        if 2.2 > w/h > 1.9 and w*h > 3000:
+        if 2.6 > w/h > 2 and w*h>4000:
             cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cnts.append(c)
             X = x
