@@ -21,7 +21,3 @@ def cropChars(image):
 		H = h
 
 	return image
-
-if __name__ == '__main__':
-	image = detectplate(cv2.imread('car.JPG'))
-	cropChars(image)
