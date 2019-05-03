@@ -25,14 +25,14 @@ def segmentCharacters(image):
 		H = h
 
 	#cv2.imshow('',chars[0])
-	cv2.waitKey(0)	
-	return chars, x_cords 
+	cv2.waitKey(0)
+	return chars, x_cords
 
 def sortingCharacters(chars, x_cords):
 	dic = {}
 	for i in range(0,len(chars)):
 		#cv2.imshow(''+str(i),chars[i])
-		dic[str(i)] = x_cords[i]
+		dic[i] = x_cords[i]
 		#print(x_cords[i], int(i))
 		#print(chars[i].shape)
 	sorted_d = sorted(dic.items(), key=operator.itemgetter(1))
