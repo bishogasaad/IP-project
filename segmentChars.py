@@ -16,7 +16,7 @@ def segmentCharacters(image):
 
 	for c in contours:
 		(x, y, w, h) = cv2.boundingRect(c)
-		cv2.rectangle(image, (x, y), (x + w, y + h), (255, 255, 255), 2)
+		# cv2.rectangle(image, (x, y), (x + w, y + h), (255, 255, 255), 2)
 		chars.append(image[y:y+h, x:x+w])
 		x_cords.append(x)
 		X = x
@@ -24,8 +24,8 @@ def segmentCharacters(image):
 		W = w
 		H = h
 
-	#cv2.imshow('',chars[0])
-	cv2.waitKey(0)
+	# cv2.imshow('',chars[0])
+	# cv2.waitKey(0)
 	return chars, x_cords
 
 def sortingCharacters(chars, x_cords):
