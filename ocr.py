@@ -38,4 +38,34 @@ def ocr(image):
     oem = 1
     psm = 13
     config = '--oem ' + str(oem) + ' --psm ' + str(psm)
-    return pytesseract.image_to_string(image, lang=lang, config=config)
+    char = pytesseract.image_to_string(image, lang=lang, config=config)
+    char = char.strip()
+    # use our prior knowledge to fix possible errors
+    # char cannot be empty, nor can be more than one character
+    if len(char) == 0 or len(char) > 1:
+        psm = 10
+        config = '--oem ' + str(oem) + ' --psm ' + str(psm)
+        char = pytesseract.image_to_string(image, lang=lang, config=config)
+        char = char.strip()
+    # convert arabic numerals to english
+    char = arabicToEnglishNumeralsChar(char)
+    return char
+
+def arabicToEnglishNumeralsChar(numeral):
+    # returns english equivalent of numeral if it's
+    # an arabic numeral, if not, returns it unchanged
+    ar = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
+    en = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    for i in range(10):
+        if numeral == ar[i]:
+            return en[i]
+    return numeral
+
+def arabicToEnglishNumeralsList(chars):
+    # returns new list of chars, where each
+    # arabic numeral is converted to its english
+    # equivalent
+    new_chars = list(chars)
+    for i in range(len(chars)):
+        chars[i] = arabicToEnglishNumeralsChar(chars[i])
+    return new_chars
