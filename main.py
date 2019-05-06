@@ -4,6 +4,7 @@ from cropChars import *
 from segmentChars import *
 from ocr import ocr
 import sys
+import json
 
 def main():
 	program_options = processArguments()
@@ -31,19 +32,29 @@ def main():
 			# cv2.imshow('char',char_img)
 			# cv2.waitKey(0)
 			# cv2.imwrite('./output/'+str(x)+'.png', char_img)
-		print(' '.join(chars_text))
+		if program_options['output'] == 'json':
+			output = {
+				'plates': [
+					chars_text
+				]
+			}
+			print(json.dumps(output))
+		else:
+			print(' '.join(chars_text))
 	if not program_options['silent']:
 		cv2.waitKey(0)
 		cv2.destroyAllWindows()
 
 
 def printUsage():
-	print('Usage:')
-	print('    python3 main.py [-s|--silent] <image_path> [<image_path> [...]]')
-	print('    python3 main.py --help')
-	print('')
-	print('-s, --silent:    do not show any windows, print output only')
-	print('-h, --help:      show this help message')
+	print('''python3 main.py [<options>] <image_path> [<image_path> [...]]
+python3 main.py --help
+
+Options:
+-s, --silent:   do not show any windows, print output only
+--json:         output in json format
+
+-h, --help:     show this help message''')
 	
 
 def processArguments():
@@ -52,14 +63,17 @@ def processArguments():
 	program_options = {
 		'help': False,
 		'silent': False,
+		'output': 'simple',
 		'image_paths': []
 	}
 	cmd_args = sys.argv[1:]
 	for arg in cmd_args:
 		if arg == '-h' or arg == '--help':
 			program_options['help'] = True
-		if arg == '-s' or arg == '--silent':
+		elif arg == '-s' or arg == '--silent':
 			program_options['silent'] = True
+		elif arg == '--json':
+			program_options['output'] = 'json'
 		else:
 			program_options['image_paths'].append(arg)
 	return program_options

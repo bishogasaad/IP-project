@@ -3,11 +3,14 @@
 ## Usage
 
 ```
-python3 main.py [-s|--silent] <image_path> [<image_path> [...]]
+python3 main.py [<options>] <image_path> [<image_path> [...]]
 python3 main.py --help
 
--s, --silent:    do not show any windows, print output only
--h, --help:      show this help message
+Options:
+-s, --silent:   do not show any windows, print output only
+--json:         output in json format
+
+-h, --help:     show this help message
 ```
 
 ---
