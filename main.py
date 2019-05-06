@@ -15,9 +15,21 @@ def main():
 		program_options['image_paths'].append('car.JPG')
 		print('Warning: Missing image path. Will use default image ('+program_options['image_paths'][0]+')')
 		printUsage()
+	json_output = []
 	for i, image_path in enumerate(program_options['image_paths']):
 		img = cv2.imread(image_path)
 		plate = detectplate(img)
+		if plate.size == 0:
+			if program_options['output'] == 'json':
+				output = {
+					'image_path': image_path,
+					'plates': [],
+					'error': 'Error: cannot detect plate in ' + image_path
+				}
+				json_output.append(output)
+			else:
+				print('Error: cannot detect plate in ' + image_path)
+			continue
 		chars = cropChars(plate)
 		if not program_options['silent']:
 			cv2.imshow('plate'+str(i), plate)
@@ -34,13 +46,14 @@ def main():
 			# cv2.imwrite('./output/'+str(x)+'.png', char_img)
 		if program_options['output'] == 'json':
 			output = {
-				'plates': [
-					chars_text
-				]
+				'image_path': image_path,
+				'plates': [chars_text]
 			}
-			print(json.dumps(output))
+			json_output.append(output)
 		else:
 			print(' '.join(chars_text))
+	if program_options['output'] == 'json':
+		print(json.dumps(json_output, indent=4))
 	if not program_options['silent']:
 		cv2.waitKey(0)
 		cv2.destroyAllWindows()
